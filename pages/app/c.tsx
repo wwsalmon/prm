@@ -120,7 +120,7 @@ export default function C({}: {}) {
     );
 }
 
-export const getServersideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getSession(context);
 
     if (!session) return {redirect: {permanent: false, destination: "/"}};

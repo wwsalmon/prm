@@ -1,4 +1,4 @@
-import {useSession} from "next-auth/client";
+import {signOut, useSession} from "next-auth/client";
 import Button from "./Button";
 import Container from "./Container";
 import {useRouter} from "next/router";
@@ -21,13 +21,16 @@ export default function Navbar() {
                         </a>
                     </Link>
                 )}
-                <div className="ml-auto">
+                <div className="ml-auto flex items-center">
                     {session ? (
-                        <img
-                            src={session.user.image}
-                            alt={`Profile picture of ${session.user.name}`}
-                            className="w-8 h-8 rounded-full"
-                        />
+                        <>
+                            <Button onClick={signOut} className="mr-4">Sign out</Button>
+                            <img
+                                src={session.user.image}
+                                alt={`Profile picture of ${session.user.name}`}
+                                className="w-8 h-8 rounded-full"
+                            />
+                        </>
                     ) : (
                         <Button href="/auth/signin">Sign in</Button>
                     )}
