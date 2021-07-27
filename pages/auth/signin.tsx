@@ -4,7 +4,8 @@ import {useEffect} from "react";
 import Link from "next/link";
 import SEO from "../../components/SEO";
 import SignInButton from "../../components/SignInButton";
-import {UserModel} from "../../models/User";
+import {PrmUserModel} from "../../models/PrmUser";
+import dbConnect from "../../utils/dbConnect";
 
 export default function SignIn({notAllowed}: { notAllowed: boolean }) {
     const [session, loading] = useSession();
@@ -32,7 +33,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!session) return {props: {}};
 
     try {
-        const thisUser = await UserModel.findOne({email: session.user.email});
+        await dbConnect();
+        const thisUser = await PrmUserModel.findOne({email: session.user.email});
         return thisUser ? {redirect: {permanent: false, destination: "/app"}} : {props: {notAllowed: true}};
     } catch (e) {
         console.log(e);

@@ -1,6 +1,5 @@
-export interface UserObj {
+export interface PrmUserObj {
     email: string,
-    username: string,
     name: string,
     image: string,
 }

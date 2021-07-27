@@ -1,14 +1,13 @@
-import {UserModel} from "../../../models/User";
 import {NextApiRequest, NextApiResponse} from "next";
 import {getSession} from "next-auth/client";
 import dbConnect from "../../../utils/dbConnect";
+import {PrmUserModel} from "../../../models/PrmUser";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
         case "POST":
             const session = await getSession({req});
             if (!session) return res.status(403);
-            if (session.userId) return res.status(200).json({message: "Account already exists"});
 
             if (!(req.body.username)) {
                 return res.status(406);
@@ -17,11 +16,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             try {
                 await dbConnect();
 
-                await UserModel.create({
+                await PrmUserModel.create({
                     email: session.user.email,
                     name: session.user.name,
                     image: session.user.image,
-                    username: req.body.username,
                 });
 
                 return res.status(200).json({message: "Object created"});

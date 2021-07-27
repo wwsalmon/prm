@@ -5,10 +5,7 @@ import Navbar from "../components/Navbar";
 import NProgress from "nprogress";
 import "../styles/nprogress.css";
 import Router from "next/router";
-
-Router.events.on("routeChangeStart", () => NProgress.start());
-Router.events.on("routeChangeComplete", () => NProgress.done());
-Router.events.on("routeChangeError", () => NProgress.done());
+import "../styles/react-autocomplete-input.css";
 
 export default function App({Component, pageProps}) {
     return (

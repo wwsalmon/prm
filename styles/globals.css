@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+    font-family: "Manrope", sans-serif;
+}
+
+.font-courier {
+    font-family: "Courier Prime", monospace;
+}
+
 .up-spinner {
     position: absolute;
     top: calc(50% - 0.5rem);

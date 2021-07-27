@@ -4,9 +4,9 @@ export default function Container({children, className, width = "4xl", padding =
     return (
         <div
             className={"mx-auto px-4 " + ({
-                4: "px-4 ",
-                6: "px-6 ",
-                8: "px-8 ",
+                4: " ",
+                6: "sm:px-6 ",
+                8: "sm:px-8 ",
             }[padding]) + ({
                 "4xl": "max-w-4xl ",
                 "7xl": "max-w-7xl ",
