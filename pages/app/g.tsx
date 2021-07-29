@@ -40,7 +40,7 @@ export default function G({}: {}) {
                                 setSelectedIndex(selectedIndex - 1);
                             }
                             else if (e.key === "Escape") router.push("/app");
-                            else if (e.key === "Enter" && dataReady) router.push(`/app/c/${data.data[selectedIndex]._id}`);
+                            else if (e.key === "Enter" && dataReady && data.data[selectedIndex]) router.push(`/app/c/${data.data[selectedIndex]._id}`);
                         }}
                         autoFocus={true}
                     />
