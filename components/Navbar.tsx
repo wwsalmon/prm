@@ -12,7 +12,7 @@ export default function Navbar() {
     return (
         <div className="w-full sticky top-0 bg-gray-900 text-white">
             <Container className="flex items-center h-16" width="full">
-                {["/app/c", "/app/g"].includes(router.route) && (
+                {["/app/c", "/app/g", "/app/n"].includes(router.route) && (
                     <KeyboardButton href="/app" keyName="Escape" keyLabel="Esc" label="Back" navbar={true}/>
                 )}
                 <div className="ml-auto flex items-center">
