@@ -1,17 +1,14 @@
-import DarkWrapper from "../../components/DarkWrapper";
-import Container from "../../components/Container";
+import DarkWrapper from "../../../components/DarkWrapper";
+import Container from "../../../components/Container";
 import {useEffect, useRef, useState} from "react";
-import BigInput from "../../components/BigInput";
+import BigInput from "../../../components/BigInput";
 import TextInput from "react-autocomplete-input";
 import {useRouter} from "next/router";
 import Mousetrap from "mousetrap";
 import {GetServerSideProps} from "next";
 import {getSession} from "next-auth/client";
 import axios from "axios";
-
-const Cursor = ({match, className}: {match: boolean, className?: string}) => (
-    <span className={"text-2xl text-white whitespace-pre-wrap -mt-1 " + (match ? "" : "opacity-75 ") + (className || "")}>&gt;  </span>
-);
+import Cursor from "../../../components/Cursor";
 
 export default function C({}: {}) {
     const router = useRouter();

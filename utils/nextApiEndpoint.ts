@@ -26,19 +26,21 @@ export default function nextApiEndpoint(
 
             switch (req.method) {
                 case "GET": {
-                    return await getFunction(req, res, session);
+                    return await getFunction(req, res, session, thisUser);
                 }
                 case "POST": {
                     return await postFunction(req, res, session, thisUser);
                 }
                 case "DELETE": {
-                    return await deleteFunction(req, res, session);
+                    return await deleteFunction(req, res, session, thisUser);
                 }
                 default: {
                     return res405(res);
                 }
             }
         } catch (e) {
+            console.log(e);
+
             return res500(res, e);
         }
     }

@@ -7,8 +7,15 @@ import {PrmUserModel} from "../../models/PrmUser";
 import {PrmUserObj} from "../../utils/types";
 
 const handler: NextApiHandler = nextApiEndpoint(
-    async function getFunction(req, res, session) {
+    async function getFunction(req, res, session, thisUser) {
+        if (req.query.searchString) {
+            const contacts = await PrmContactModel.find({
+                prmUserId: thisUser._id,
+                name: {$regex: req.query.searchString.toString()},
+            });
 
+            return res200(res, {data: contacts});
+        }
     },
     async function postFunction(req, res, session, thisUser) {
         // if id, then update, else create new
