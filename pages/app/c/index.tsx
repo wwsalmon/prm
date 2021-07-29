@@ -8,8 +8,13 @@ import {GetServerSideProps} from "next";
 import {getSession} from "next-auth/client";
 import axios from "axios";
 import Cursor from "../../../components/Cursor";
+import {ssr404, ssrRedirect} from "../../../utils/apiConstants";
+import dbConnect from "../../../utils/dbConnect";
+import {PrmUserModel} from "../../../models/PrmUser";
+import cleanForJSON from "../../../utils/cleanForJSON";
+import {DatedObj, PrmUserObj} from "../../../utils/types";
 
-export default function C({}: {}) {
+export default function C({thisUser}: {thisUser: DatedObj<PrmUserObj>}) {
     const router = useRouter();
     const [name, setName] = useState<string>("");
     const [tags, setTags] = useState<string>("");
@@ -42,9 +47,8 @@ export default function C({}: {}) {
     return (
         <DarkWrapper>
             <Container width="4xl" className="py-12" padding={8}>
+                <p className="mb-12 text-5xl opacity-25">New contact</p>
                 <div className="grid" style={{gridTemplateColumns: "36px 1fr"}}>
-                    <Cursor match={true} className="font-bold"/>
-                    <p className="text-2xl font-courier font-bold">New contact</p>
                     <Cursor match={focused === "name"}/>
                     <BigInput
                         value={name}
@@ -64,7 +68,7 @@ export default function C({}: {}) {
                     />
                     <Cursor match={focused === "tags"}/>
                     <TextInput
-                        options={{"#": ["friend", "work", "school"].filter(d => !tags.includes(d))}}
+                        options={{"#": thisUser.contactTags.filter(d => !tags.includes(d))}}
                         trigger={["#"]}
                         Component="input"
                         className={"bg-gray-900 w-full focus:outline-none text-2xl font-courier " + ((focused === "tags") ? "" : "opacity-75")}
@@ -121,7 +125,18 @@ export default function C({}: {}) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getSession(context);
 
-    if (!session) return {redirect: {permanent: false, destination: "/"}};
+    if (!session) return ssrRedirect("/");
 
-    return {props: {}};
+    try {
+        await dbConnect();
+
+        const thisUser = await PrmUserModel.findOne({email: session.user.email});
+
+        if (!thisUser) return ssrRedirect("/auth/newaccount");
+
+        return {props: {thisUser: cleanForJSON(thisUser)}};
+    } catch (e) {
+        console.log(e);
+        return ssr404;
+    }
 }

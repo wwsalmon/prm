@@ -11,7 +11,7 @@ const handler: NextApiHandler = nextApiEndpoint(
         if (req.query.searchString) {
             const contacts = await PrmContactModel.find({
                 prmUserId: thisUser._id,
-                name: {$regex: req.query.searchString.toString()},
+                name: {$regex: req.query.searchString.toString(), $options: "i"},
             });
 
             return res200(res, {data: contacts});
@@ -45,20 +45,25 @@ const handler: NextApiHandler = nextApiEndpoint(
 
             return res200(res, {data: newContact});
         } else {
-            if (!(req.body.name && req.body.tags && req.body.description)) return res400(res);
+            if (!req.body.name) return res400(res);
 
-            const tags = splitTags(req.body.tags);
+            let tags = [];
 
-            if (tags.length) {
-                await PrmUserModel.updateOne({email: session.user.email}, {
-                    $addToSet: {contactTags: {$each: tags}}
-                });
+            if (req.body.tags) {
+                tags = splitTags(req.body.tags);
+
+                if (tags.length) {
+                    await PrmUserModel.updateOne({email: session.user.email}, {
+                        $addToSet: {contactTags: {$each: tags}}
+                    });
+                }
+
             }
 
             const thisContact = await PrmContactModel.create({
                 prmUserId: thisUser._id,
                 name: req.body.name,
-                description: req.body.description,
+                description: req.body.description || "",
                 tags: tags,
             });
 

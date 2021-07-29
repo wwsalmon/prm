@@ -21,6 +21,7 @@ export default function G({}: {}) {
     return (
         <DarkWrapper>
             <Container width="4xl" className="py-12" padding={8}>
+                <p className="mb-12 text-5xl opacity-25">Go to contact</p>
                 <div className="grid mb-8" style={{gridTemplateColumns: "36px 1fr"}}>
                     <Cursor match={true}/>
                     <BigInput
