@@ -12,7 +12,7 @@ const BigInput = forwardRef(({value, setValue, placeholder, onKeyDown, autoFocus
     return (
         <input
             type="text"
-            className={"font-courier text-2xl bg-gray-900 text-white focus:outline-none w-full " + (className || "")}
+            className={"font-courier text-xl bg-gray-900 text-white focus:outline-none w-full " + (className || "")}
             placeholder={placeholder}
             value={value}
             onChange={e => setValue(e.target.value)}

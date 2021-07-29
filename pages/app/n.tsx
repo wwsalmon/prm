@@ -75,7 +75,7 @@ export default function N({thisUser, thisContact}: {thisUser: DatedObj<PrmUserOb
                             control: () => ({
                                 backgroundColor: "rgb(17, 24, 39)",
                                 fontFamily: "Courier Prime",
-                                fontSize: 24,
+                                fontSize: 20,
                                 lineHeight: "32px",
                                 opacity: (focused === "contact") ? 1.0 : 0.75,
                             }),
@@ -138,7 +138,7 @@ export default function N({thisUser, thisContact}: {thisUser: DatedObj<PrmUserOb
                         options={{"#": thisUser.noteTags.filter(d => !tags.includes(d))}}
                         trigger={["#"]}
                         Component="input"
-                        className={"bg-gray-900 w-full focus:outline-none text-2xl font-courier " + ((focused === "tags") ? "" : "opacity-75")}
+                        className={"bg-gray-900 w-full focus:outline-none text-xl font-courier " + ((focused === "tags") ? "" : "opacity-75")}
                         placeholder="Tags"
                         value={tags}
                         onChange={value => setTags(value)}
@@ -157,7 +157,7 @@ export default function N({thisUser, thisContact}: {thisUser: DatedObj<PrmUserOb
                         onFocus={() => setFocused("tags")}
                     />
                     <Cursor match={focused === "description"}/>
-                    <div className="grid text-2xl font-courier">
+                    <div className="grid text-xl font-courier">
                         <textarea
                             className={"w-full bg-gray-900 text-white resize-none overflow-hidden focus:outline-none "  + ((focused === "description") ? "" : "opacity-75")}
                             ref={descriptionRef}
@@ -182,7 +182,7 @@ export default function N({thisUser, thisContact}: {thisUser: DatedObj<PrmUserOb
                     <input
                         type="date"
                         ref={dateRef}
-                        className={`bg-gray-900 focus:outline-none font-courier text-2xl text-white ${focused === "date" ? "" : "opacity-75"}`}
+                        className={`bg-gray-900 focus:outline-none font-courier text-xl text-white ${focused === "date" ? "" : "opacity-75"}`}
                         onFocus={() => setFocused("date")}
                         value={date}
                         onChange={e => setDate(e.target.value)}

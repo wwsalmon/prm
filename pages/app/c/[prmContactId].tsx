@@ -32,7 +32,7 @@ export default function ContactPage({thisContact}: {thisContact: DatedObj<PrmCon
                                 <div key={note._id + tag} className="opacity-50 ml-2"><span>#{tag}</span></div>
                             ))}
                         </div>
-                        <p className="whitespace-pre-wrap font-courier">{note.description}</p>
+                        <p className="whitespace-pre-wrap leading-6 opacity-50 font-courier">{note.description}</p>
                     </div>
                 ))}
                 <div className="flex fixed top-0 left-4 h-16">

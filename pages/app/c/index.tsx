@@ -73,7 +73,7 @@ export default function C({thisUser}: {thisUser: DatedObj<PrmUserObj>}) {
                         options={{"#": thisUser.contactTags.filter(d => !tags.includes(d))}}
                         trigger={["#"]}
                         Component="input"
-                        className={"bg-gray-900 w-full focus:outline-none text-2xl font-courier " + ((focused === "tags") ? "" : "opacity-75")}
+                        className={"bg-gray-900 w-full focus:outline-none text-xl font-courier " + ((focused === "tags") ? "" : "opacity-75")}
                         placeholder="Tags"
                         value={tags}
                         onChange={value => setTags(value)}
@@ -91,7 +91,7 @@ export default function C({thisUser}: {thisUser: DatedObj<PrmUserObj>}) {
                         onFocus={() => setFocused("tags")}
                     />
                     <Cursor match={focused === "links"}/>
-                    <div className="grid text-2xl font-courier">
+                    <div className="grid text-xl font-courier">
                         <textarea
                             className={"w-full bg-gray-900 text-white resize-none overflow-hidden focus:outline-none "  + ((focused === "links") ? "" : "opacity-75")}
                             ref={linksRef}
