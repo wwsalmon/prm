@@ -4,7 +4,6 @@ import {useEffect, useRef, useState} from "react";
 import BigInput from "../../../components/BigInput";
 import TextInput from "react-autocomplete-input";
 import {useRouter} from "next/router";
-import Mousetrap from "mousetrap";
 import {GetServerSideProps} from "next";
 import {getSession} from "next-auth/client";
 import axios from "axios";
@@ -20,16 +19,6 @@ export default function C({}: {}) {
     const linksRef = useRef(null);
     const [focused, setFocused] = useState<"name" | "tags" | "links">("name");
     const [isLoading, setIsLoading] = useState<boolean>(false);
-
-    useEffect(() => {
-        const goHome = () => {
-            router.push("/app");
-        }
-
-        Mousetrap.bind("esc", goHome);
-
-        return () => Mousetrap.unbind("Escape", goHome);
-    }, []);
 
     function onSubmit() {
         if (!name) return;

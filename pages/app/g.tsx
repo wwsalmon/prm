@@ -8,7 +8,6 @@ import useSWR, {SWRResponse} from "swr";
 import {DatedObj, PrmContactObj} from "../../utils/types";
 import fetcher from "../../utils/fetcher";
 import Link from "next/link";
-import Mousetrap from "mousetrap";
 
 export default function G({}: {}) {
     const router = useRouter();
@@ -18,16 +17,6 @@ export default function G({}: {}) {
     const {data, error}: SWRResponse<{ data: DatedObj<PrmContactObj>[] }, any> = useSWR(`/api/contact?searchString=${searchString}`, fetcher);
 
     const dataReady = data && data.data;
-
-    useEffect(() => {
-        const goHome = () => {
-            router.push("/app");
-        }
-
-        Mousetrap.bind("esc", goHome);
-
-        return () => Mousetrap.unbind("Escape", goHome);
-    }, []);
 
     return (
         <DarkWrapper>

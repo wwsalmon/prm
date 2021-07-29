@@ -11,7 +11,7 @@ export default function Navbar() {
     return (
         <div className="w-full sticky top-0 bg-gray-900 text-white">
             <Container className="flex items-center h-16" width="full" padding={8}>
-                {["/app/c", "/app/g", "/app/n"].includes(router.route) && (
+                {router.route.substr(0, 5) === "/app/" && (
                     <Link href="/app">
                         <a className="flex items-center h-full -mx-8 px-8 hover:bg-blue-900">
                             <div className="w-10 h-10 border border-white rounded text-xs flex items-center justify-center">
