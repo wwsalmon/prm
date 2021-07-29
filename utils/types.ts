@@ -2,6 +2,15 @@ export interface PrmUserObj {
     email: string,
     name: string,
     image: string,
+    contactTags: string[],
+    noteTags: string[],
+}
+
+export interface PrmContactObj {
+    prmUserId: string,
+    name: string,
+    tags: string[],
+    description: string,
 }
 
 export interface SessionObj {

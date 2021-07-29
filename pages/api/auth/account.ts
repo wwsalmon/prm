@@ -20,6 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     email: session.user.email,
                     name: session.user.name,
                     image: session.user.image,
+                    contactTags: [],
+                    noteTags: [],
                 });
 
                 return res.status(200).json({message: "Object created"});

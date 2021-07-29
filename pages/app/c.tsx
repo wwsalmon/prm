@@ -5,9 +5,9 @@ import BigInput from "../../components/BigInput";
 import TextInput from "react-autocomplete-input";
 import {useRouter} from "next/router";
 import Mousetrap from "mousetrap";
-import Link from "next/link";
 import {GetServerSideProps} from "next";
 import {getSession} from "next-auth/client";
+import axios from "axios";
 
 const Cursor = ({match, className}: {match: boolean, className?: string}) => (
     <span className={"text-2xl text-white whitespace-pre-wrap -mt-1 " + (match ? "" : "opacity-75 ") + (className || "")}>&gt;  </span>
@@ -26,7 +26,6 @@ export default function C({}: {}) {
 
     useEffect(() => {
         const goHome = () => {
-            console.log("escaped");
             router.push("/app");
         }
 
@@ -39,6 +38,19 @@ export default function C({}: {}) {
         if (!name) return;
 
         setIsLoading(true);
+
+        axios.post("/api/contact", {
+            name: name,
+            tags: tags,
+            description: links,
+        }).then(res => {
+            console.log(res);
+            setIsLoading(false);
+            router.push(`/c/${res.data.data._id}`);
+        }).catch(e => {
+            console.log(e);
+            setIsLoading(false);
+        });
     }
 
     return (
