@@ -1,25 +1,26 @@
 import DarkWrapper from "../../components/DarkWrapper";
 import Container from "../../components/Container";
 import Cursor from "../../components/Cursor";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {GetServerSideProps} from "next";
 import {getSession} from "next-auth/client";
 import {ssr404, ssrRedirect} from "../../utils/apiConstants";
 import dbConnect from "../../utils/dbConnect";
 import {PrmUserModel} from "../../models/PrmUser";
 import cleanForJSON from "../../utils/cleanForJSON";
-import {DatedObj, PrmUserObj} from "../../utils/types";
+import {DatedObj, PrmContactObj, PrmUserObj} from "../../utils/types";
 import TextInput from "react-autocomplete-input";
 import {useRouter} from "next/router";
 import AsyncSelect from "react-select/async";
 import axios from "axios";
 import {format} from "date-fns";
+import {PrmContactModel} from "../../models/PrmContact";
 
-export default function N({thisUser}: {thisUser: DatedObj<PrmUserObj>}) {
+export default function N({thisUser, thisContact}: {thisUser: DatedObj<PrmUserObj>, thisContact?: DatedObj<PrmContactObj>}) {
     const router = useRouter();
-    const [focused, setFocused] = useState<"contact" | "tags" | "description" | "date">("contact");
+    const [focused, setFocused] = useState<"contact" | "tags" | "description" | "date">(thisContact ? "tags" : "contact");
     const [tags, setTags] = useState<string>("");
-    const [selectedContact, setSelectedContact] = useState<{label: string, value: string}>(null);
+    const [selectedContact, setSelectedContact] = useState<{label: string, value: string}>(thisContact ? {label: thisContact.name, value: thisContact._id} : null);
     const [description, setDescription] = useState<string>("");
     const [date, setDate] = useState<string>(format(new Date(), "yyyy-MM-dd"));
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -47,6 +48,10 @@ export default function N({thisUser}: {thisUser: DatedObj<PrmUserObj>}) {
             setIsLoading(false);
         });
     }
+
+    useEffect(() => {
+        if (thisContact && tagsRef.current) tagsRef.current.refInput.current.focus();
+    }, [tagsRef.current]);
 
     return (
         <DarkWrapper>
@@ -121,7 +126,7 @@ export default function N({thisUser}: {thisUser: DatedObj<PrmUserObj>}) {
                                 router.push("/app");
                             }
                         }}
-                        autoFocus={true}
+                        autoFocus={!thisContact}
                         onFocus={() => setFocused("contact")}
                         value={selectedContact}
                         onChange={(newValue) => setSelectedContact(newValue)}
@@ -218,7 +223,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
         if (!thisUser) return ssrRedirect("/auth/newaccount");
 
-        return {props: {thisUser: cleanForJSON(thisUser)}};
+        const {contactId} = context.query;
+
+        let thisContact = null;
+
+        if (contactId) {
+            thisContact = await PrmContactModel.findOne({_id: contactId.toString()});
+
+            if (!thisContact || (thisContact.prmUserId.toString() !== thisUser._id.toString())) thisContact = null;
+        }
+
+        return {props: {thisUser: cleanForJSON(thisUser), thisContact: cleanForJSON(thisContact)}};
     } catch (e) {
         console.log(e);
         return ssr404;

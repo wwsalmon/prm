@@ -44,8 +44,8 @@ export default function G({}: {}) {
                     />
                 </div>
                 {dataReady && data.data.map((d, i) => (
-                    <Link href={`/app/c/${d._id}`}>
-                        <a key={d._id} className={"-mx-4 px-4 rounded py-3 flex items-center " + (i === selectedIndex ? "bg-blue-900" : "opacity-50")}>
+                    <Link href={`/app/c/${d._id}`} key={d._id}>
+                        <a className={"-mx-4 px-4 rounded py-3 flex items-center " + (i === selectedIndex ? "bg-blue-900" : "opacity-50")}>
                             <p className="text-xl mr-3">{d.name}</p>
                             {d.tags.map(tag => (
                                 <div key={d._id + tag} className="ml-2 opacity-50"><span>#{tag}</span></div>

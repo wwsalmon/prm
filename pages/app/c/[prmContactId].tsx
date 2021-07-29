@@ -34,10 +34,10 @@ export default function ContactPage({thisContact}: {thisContact: DatedObj<PrmCon
                     </div>
                 ))}
                 <div className="flex fixed top-0 left-4 h-16">
-                    <KeyboardButton keyName="Escape" label="Home" keyLabel="Esc" onClick={() => null}/>
+                    <KeyboardButton keyName="Esc" label="Home" keyLabel="Esc" href="/app"/>
                     <KeyboardButton keyName="e" keyLabel="E" label="Edit" onClick={() => null}/>
                     <KeyboardButton keyName="Delete" keyLabel="Del" label="Delete" onClick={() => null}/>
-                    <KeyboardButton keyName="n" keyLabel="N" label="New note" onClick={() => null}/>
+                    <KeyboardButton keyName="n" keyLabel="N" label="New note" href={`/app/n?contactId=${thisContact._id}`}/>
                 </div>
             </Container>
         </DarkWrapper>

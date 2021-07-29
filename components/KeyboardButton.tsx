@@ -1,15 +1,18 @@
 import Button from "./Button";
 import {useEffect} from "react";
 import Mousetrap from "mousetrap";
+import {useRouter} from "next/router";
 
 export default function KeyboardButton({href, onClick, keyName, keyLabel, label, navbar}: {href?: string, onClick?: () => any, keyName: string, keyLabel: string, label: string, navbar?: boolean}) {
     if ((+!!href + +!!onClick) !== 1) return <></>;
+    const router = useRouter();
     let buttonProps: {href: string} | {onClick: () => any} = href ? {href: href} : {onClick: onClick};
 
     useEffect(() => {
-        Mousetrap.bind(keyName, onClick);
+        const onKeyPress = href ? () => router.push(href) : onClick;
+        Mousetrap.bind(keyName, onKeyPress);
 
-        return () => Mousetrap.unbind(keyName, onClick);
+        return () => Mousetrap.unbind(keyName, onKeyPress);
     }, []);
 
     return (
