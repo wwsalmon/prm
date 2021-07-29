@@ -32,7 +32,7 @@ export default function C({}: {}) {
         }).then(res => {
             console.log(res);
             setIsLoading(false);
-            router.push(`/c/${res.data.data._id}`);
+            router.push(`/app/c/${res.data.data._id}`);
         }).catch(e => {
             console.log(e);
             setIsLoading(false);

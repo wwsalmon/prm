@@ -37,13 +37,13 @@ export default function G({}: {}) {
                                 setSelectedIndex(selectedIndex - 1);
                             }
                             else if (e.key === "Escape") router.push("/app");
-                            else if (e.key === "Enter" && dataReady) router.push(`/c/${data.data[selectedIndex]._id}`);
+                            else if (e.key === "Enter" && dataReady) router.push(`/app/c/${data.data[selectedIndex]._id}`);
                         }}
                         autoFocus={true}
                     />
                 </div>
                 {dataReady && data.data.map((d, i) => (
-                    <Link href={`/c/${d._id}`}>
+                    <Link href={`/app/c/${d._id}`}>
                         <a key={d._id} className={"-mx-4 px-4 rounded py-3 flex items-center " + (i === selectedIndex ? "bg-blue-900" : "opacity-50")}>
                             <p className="text-xl mr-3">{d.name}</p>
                             {d.tags.map(tag => (
