@@ -13,6 +13,13 @@ export interface PrmContactObj {
     description: string,
 }
 
+export interface PrmNoteObj {
+    prmContactId: string,
+    tags: string[],
+    description: string,
+    date: string,
+}
+
 export interface SessionObj {
     user: {
         name: string,

@@ -13,17 +13,40 @@ import TextInput from "react-autocomplete-input";
 import {useRouter} from "next/router";
 import AsyncSelect from "react-select/async";
 import axios from "axios";
+import {format} from "date-fns";
 
 export default function N({thisUser}: {thisUser: DatedObj<PrmUserObj>}) {
     const router = useRouter();
     const [focused, setFocused] = useState<"contact" | "tags" | "description" | "date">("contact");
     const [tags, setTags] = useState<string>("");
+    const [selectedContact, setSelectedContact] = useState<{label: string, value: string}>(null);
     const [description, setDescription] = useState<string>("");
+    const [date, setDate] = useState<string>(format(new Date(), "yyyy-MM-dd"));
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const contactRef = useRef(null);
     const tagsRef = useRef(null);
     const descriptionRef = useRef(null);
     const dateRef = useRef(null);
+
+    function onSubmit() {
+        if (!selectedContact) return;
+
+        setIsLoading(true);
+
+        axios.post("/api/note", {
+            contactId: selectedContact.value,
+            tags: tags,
+            description: description,
+            date: date,
+        }).then(() => {
+            setIsLoading(false);
+            router.push(`/app/c/${selectedContact.value}`);
+        }).catch(e => {
+            console.log(e);
+            setIsLoading(false);
+        });
+    }
 
     return (
         <DarkWrapper>
@@ -94,10 +117,14 @@ export default function N({thisUser}: {thisUser: DatedObj<PrmUserObj>}) {
                             if (e.key === "Enter") {
                                 setFocused("tags");
                                 tagsRef.current && tagsRef.current.refInput.current.focus();
+                            } else if (e.key === "Escape") {
+                                router.push("/app");
                             }
                         }}
                         autoFocus={true}
                         onFocus={() => setFocused("contact")}
+                        value={selectedContact}
+                        onChange={(newValue) => setSelectedContact(newValue)}
                     />
                     <Cursor match={focused === "tags"}/>
                     <TextInput
@@ -112,7 +139,8 @@ export default function N({thisUser}: {thisUser: DatedObj<PrmUserObj>}) {
                         onKeyDown={e => {
                             if (e.key === "Enter") {
                                 e.preventDefault();
-                                descriptionRef.current && descriptionRef.current.focus();
+                                if (e.shiftKey) contactRef.current && contactRef.current.focus();
+                                else descriptionRef.current && descriptionRef.current.focus();
                             } else if (e.key === "ArrowUp") {
                                 contactRef.current && contactRef.current.focus();
                             } else if (e.key === "Escape") {
@@ -131,8 +159,9 @@ export default function N({thisUser}: {thisUser: DatedObj<PrmUserObj>}) {
                             style={{gridArea: "1 / 1 / 2 / 2"}}
                             placeholder="Description"
                             onKeyDown={e => {
-                                if (e.ctrlKey && e.key === "Enter") {
-                                    console.log("ctrl + enter");
+                                if (e.key === "Enter") {
+                                    if (e.ctrlKey) dateRef.current && dateRef.current.focus();
+                                    if (e.shiftKey) tagsRef.current && tagsRef.current.refInput.current.focus();
                                 } else if (e.key === "Escape") {
                                     router.push("/app");
                                 }
@@ -143,8 +172,35 @@ export default function N({thisUser}: {thisUser: DatedObj<PrmUserObj>}) {
                         <div style={{gridArea: "1 / 1 / 2 / 2"}} className="invisible whitespace-pre-wrap"><span>{description} </span></div>
                     </div>
                     <Cursor match={focused === "date"}/>
-                    <input type="text" ref={dateRef}/>
+                    <input
+                        type="date"
+                        ref={dateRef}
+                        className={`bg-gray-900 focus:outline-none font-courier text-2xl text-white ${focused === "date" ? "" : "opacity-75"}`}
+                        onFocus={() => setFocused("date")}
+                        value={date}
+                        onChange={e => setDate(e.target.value)}
+                        onKeyDown={e => {
+                            if (e.key === "Enter") {
+                                if (e.ctrlKey && !isLoading) {
+                                    dateRef.current && dateRef.current.blur();
+                                    onSubmit();
+                                }
+                                if (e.shiftKey) {
+                                    e.preventDefault();
+                                    descriptionRef.current && descriptionRef.current.focus();
+                                }
+                            } else if (e.key === "Escape") {
+                                router.push("/app");
+                            }
+                        }}
+                    />
                 </div>
+                {isLoading && (
+                    <p className="ml-9 opacity-75 mt-4">Saving...</p>
+                )}
+                {(focused === "date" && !isLoading) && (
+                    <p className="ml-9 opacity-75 mt-4">{selectedContact ? "Ctrl + Enter to save" : "Missing contact"}</p>
+                )}
             </Container>
         </DarkWrapper>
     );

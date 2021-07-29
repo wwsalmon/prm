@@ -13,7 +13,7 @@
     "@types/node": "^14.14.22",
     "@types/react": "^17.0.0",
     "axios": "^0.21.1",
-    "date-fns": "^2.22.1",
+    "date-fns": "^2.23.0",
     "mongoose": "^5.12.13",
     "mousetrap": "^1.6.5",
     "next": "10.0.5",
