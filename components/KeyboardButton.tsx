@@ -1,8 +1,16 @@
 import Button from "./Button";
+import {useEffect} from "react";
+import Mousetrap from "mousetrap";
 
 export default function KeyboardButton({href, onClick, keyName, keyLabel, label, navbar}: {href?: string, onClick?: () => any, keyName: string, keyLabel: string, label: string, navbar?: boolean}) {
     if ((+!!href + +!!onClick) !== 1) return <></>;
     let buttonProps: {href: string} | {onClick: () => any} = href ? {href: href} : {onClick: onClick};
+
+    useEffect(() => {
+        Mousetrap.bind(keyName, onClick);
+
+        return () => Mousetrap.unbind(keyName, onClick);
+    }, []);
 
     return (
         <Button {...buttonProps} className={"flex items-center h-16 hover:bg-blue-900 " + (navbar ? "-mx-4 px-4" : "-ml-4 mr-4 px-4 rounded opacity-50 hover:opacity-100")}>
