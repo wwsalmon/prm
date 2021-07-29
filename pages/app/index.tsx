@@ -5,6 +5,7 @@ import {useRouter} from "next/router";
 import Mousetrap from "mousetrap";
 import {GetServerSideProps} from "next";
 import {getSession} from "next-auth/client";
+import SEO from "../../components/SEO";
 
 const ScreenThird = ({letter, label, href}: {letter: string, label: string, href: string}) => (
     <Link href={href}>
@@ -49,6 +50,7 @@ export default function AppHome() {
 
     return (
         <DarkWrapper className="flex">
+            <SEO title="Home"/>
             <div className="flex w-full">
                 <ScreenThird letter="C" label="New contact" href="/app/c"/>
                 <ScreenThird letter="N" label="New note" href="/app/n"/>

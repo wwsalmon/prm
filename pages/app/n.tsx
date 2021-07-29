@@ -15,6 +15,7 @@ import AsyncSelect from "react-select/async";
 import axios from "axios";
 import {format} from "date-fns";
 import {PrmContactModel} from "../../models/PrmContact";
+import SEO from "../../components/SEO";
 
 export default function N({thisUser, thisContact}: {thisUser: DatedObj<PrmUserObj>, thisContact?: DatedObj<PrmContactObj>}) {
     const router = useRouter();
@@ -55,6 +56,7 @@ export default function N({thisUser, thisContact}: {thisUser: DatedObj<PrmUserOb
 
     return (
         <DarkWrapper>
+            <SEO title="New note"/>
             <Container width="4xl" padding={8}>
                 <h1 className="text-5xl my-12 opacity-25">
                     New note

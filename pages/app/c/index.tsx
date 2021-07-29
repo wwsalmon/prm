@@ -13,6 +13,7 @@ import dbConnect from "../../../utils/dbConnect";
 import {PrmUserModel} from "../../../models/PrmUser";
 import cleanForJSON from "../../../utils/cleanForJSON";
 import {DatedObj, PrmUserObj} from "../../../utils/types";
+import SEO from "../../../components/SEO";
 
 export default function C({thisUser}: {thisUser: DatedObj<PrmUserObj>}) {
     const router = useRouter();
@@ -46,6 +47,7 @@ export default function C({thisUser}: {thisUser: DatedObj<PrmUserObj>}) {
 
     return (
         <DarkWrapper>
+            <SEO title="New contact"/>
             <Container width="4xl" className="py-12" padding={8}>
                 <p className="mb-12 text-5xl opacity-25">New contact</p>
                 <div className="grid" style={{gridTemplateColumns: "36px 1fr"}}>

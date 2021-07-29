@@ -10,10 +10,12 @@ import Container from "../../../components/Container";
 import KeyboardButton from "../../../components/KeyboardButton";
 import * as mongoose from "mongoose";
 import {addMinutes, format} from "date-fns";
+import SEO from "../../../components/SEO";
 
 export default function ContactPage({thisContact}: {thisContact: DatedObj<PrmContactObj> & {notesArr: DatedObj<PrmNoteObj>[]}}) {
     return (
         <DarkWrapper>
+            <SEO title={thisContact.name}/>
             <Container width="4xl" padding={8}>
                 <h1 className="text-5xl my-12">{thisContact.name}</h1>
                 <div className="flex items-center my-4">

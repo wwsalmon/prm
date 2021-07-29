@@ -1,10 +1,12 @@
 import DarkWrapper from "../components/DarkWrapper";
 import {GetServerSideProps} from "next";
 import {getSession, signIn} from "next-auth/client";
+import SEO from "../components/SEO";
 
 export default function Home() {
     return (
         <DarkWrapper className="flex items-center justify-center">
+            <SEO/>
             <button
                 className="border border-white flex items-center p-4 rounded-lg -mt-8 hover:bg-blue-900 hover:border-transparent"
                 onClick={() => signIn("google")}
