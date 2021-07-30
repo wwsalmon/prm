@@ -129,7 +129,12 @@ export default function ContactPage({thisContact}: {thisContact: DatedObj<PrmCon
                 </Modal>
                 <div className="flex fixed top-0 left-4 h-16">
                     <KeyboardButton keyName="esc" label="Back" keyLabel="Esc" href="/app/g"/>
-                    <KeyboardButton keyName="e" keyLabel="E" label={`Edit ${selectedIndex > -1 ? "note" : ""}`} onClick={() => null}/>
+                    <KeyboardButton
+                        keyName="e"
+                        keyLabel="E"
+                        label={`Edit ${selectedIndex > -1 ? "note" : ""}`}
+                        href={`/app/e${selectedIndex > -1 ? "n" : "c"}/${selectedIndex > -1 ? notes[selectedIndex]._id : thisContact._id}`}
+                    />
                     <KeyboardButton keyName="del" keyLabel="Del" label={`Delete ${selectedIndex > -1 ? "note" : ""}`} onClick={() => setDeleteOpen(true)}/>
                     <KeyboardButton keyName="n" keyLabel="N" label="New note" href={`/app/n?contactId=${thisContact._id}`}/>
                 </div>
