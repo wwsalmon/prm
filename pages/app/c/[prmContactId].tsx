@@ -72,8 +72,6 @@ export default function ContactPage({thisContact}: {thisContact: DatedObj<PrmCon
                 console.log(e);
             })
         }
-
-
     }
 
     return (
@@ -92,7 +90,7 @@ export default function ContactPage({thisContact}: {thisContact: DatedObj<PrmCon
                     ))}
                 </div>
                 <p className="whitespace-pre-wrap font-courier opacity-50 my-4">{thisContact.description}</p>
-                {notes.map((note, i) => (
+                {notes.sort((a, b) => +new Date(b.date) - +new Date(a.date)).map((note, i) => (
                     <div key={note._id} className="my-8 relative">
                         {selectedIndex === i && (
                             <div className="w-3 h-3 bg-blue-900 rounded-full absolute -left-8 top-2"/>
@@ -130,7 +128,7 @@ export default function ContactPage({thisContact}: {thisContact: DatedObj<PrmCon
                     )}
                 </Modal>
                 <div className="flex fixed top-0 left-4 h-16">
-                    <KeyboardButton keyName="esc" label="Home" keyLabel="Esc" href="/app"/>
+                    <KeyboardButton keyName="esc" label="Back" keyLabel="Esc" href="/app/g"/>
                     <KeyboardButton keyName="e" keyLabel="E" label={`Edit ${selectedIndex > -1 ? "note" : ""}`} onClick={() => null}/>
                     <KeyboardButton keyName="del" keyLabel="Del" label={`Delete ${selectedIndex > -1 ? "note" : ""}`} onClick={() => setDeleteOpen(true)}/>
                     <KeyboardButton keyName="n" keyLabel="N" label="New note" href={`/app/n?contactId=${thisContact._id}`}/>
