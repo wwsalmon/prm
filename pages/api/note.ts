@@ -15,6 +15,48 @@ const handler: NextApiHandler = nextApiEndpoint(
         // if id, then update, else create new
         if (req.body.id) {
             if (!(req.body.tags || req.body.description || req.body.date)) return res400(res);
+
+            const thisNoteWithContact = await PrmNoteModel.aggregate([
+                {
+                    $match: {
+                        _id: mongoose.Types.ObjectId(req.body.id),
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "prm_contacts",
+                        foreignField: "_id",
+                        localField: "prmContactId",
+                        as: "contactsArr",
+                    },
+                },
+            ]);
+
+            if (!(thisNoteWithContact && thisNoteWithContact.length && thisNoteWithContact[0].contactsArr.length)) return res500(res, new Error("Invalid note ID"));
+
+            if (thisNoteWithContact[0].contactsArr[0].prmUserId.toString() !== thisUser._id.toString()) return res403(res);
+
+            let updateDoc = {};
+
+            if (req.body.date) updateDoc["date"] = new Date(req.body.date);
+            if (req.body.description) updateDoc["description"] = req.body.description;
+            if (req.body.tags) {
+                const tags = splitTags(req.body.tags);
+
+                if (tags.length) {
+                    await PrmUserModel.updateOne({email: session.user.email}, {
+                        $addToSet: {noteTags: {$each: tags}}
+                    });
+                }
+
+                updateDoc["tags"] = tags;
+            } else {
+                updateDoc["tags"] = [];
+            }
+
+            await PrmNoteModel.updateOne({_id: req.body.id}, updateDoc);
+
+            return res200(res, {});
         } else {
             if (!(req.body.contactId && req.body.date)) return res400(res);
 

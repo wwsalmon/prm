@@ -39,6 +39,8 @@ const handler: NextApiHandler = nextApiEndpoint(
                 }
 
                 updateDoc["tags"] = tags;
+            } else {
+                updateDoc["tags"] = [];
             }
 
             const newContact = await PrmContactModel.updateOne({_id: req.body.id}, updateDoc);
@@ -57,7 +59,6 @@ const handler: NextApiHandler = nextApiEndpoint(
                         $addToSet: {contactTags: {$each: tags}}
                     });
                 }
-
             }
 
             const thisContact = await PrmContactModel.create({

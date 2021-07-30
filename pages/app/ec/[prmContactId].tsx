@@ -11,7 +11,7 @@ import ContactEditor from "../../../components/ContactEditor";
 import {DatedObj, PrmContactObj, PrmUserObj} from "../../../utils/types";
 import KeyboardButton from "../../../components/KeyboardButton";
 
-export default function C({thisUser, thisContact}: {thisUser: DatedObj<PrmUserObj>, thisContact: DatedObj<PrmContactObj>}) {
+export default function EditContact({thisUser, thisContact}: {thisUser: DatedObj<PrmUserObj>, thisContact: DatedObj<PrmContactObj>}) {
     return (
         <DarkWrapper>
             <SEO title="Edit contact"/>
@@ -25,7 +25,6 @@ export default function C({thisUser, thisContact}: {thisUser: DatedObj<PrmUserOb
         </DarkWrapper>
     );
 }
-
 
 export const getServerSideProps = async ({req, params}) => {
     const session = await getSession({req});

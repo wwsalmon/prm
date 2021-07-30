@@ -13,7 +13,7 @@ export default function KeyboardButton({href, onClick, keyName, keyLabel, label,
         Mousetrap.bind(keyName, onKeyPress);
 
         return () => Mousetrap.unbind(keyName, onKeyPress);
-    }, []);
+    }, [href, onClick]);
 
     return (
         <Button {...buttonProps} className={"flex items-center h-16 hover:bg-blue-900 " + (navbar ? "-mx-4 px-4" : "-ml-4 mr-4 px-4 rounded opacity-50 hover:opacity-100")}>
