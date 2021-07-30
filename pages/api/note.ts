@@ -5,6 +5,7 @@ import {PrmNoteModel} from "../../models/PrmNote";
 import {PrmContactModel} from "../../models/PrmContact";
 import splitTags from "../../utils/splitTags";
 import {PrmUserModel} from "../../models/PrmUser";
+import * as mongoose from "mongoose";
 
 const handler: NextApiHandler = nextApiEndpoint(
     async function getFunction(req, res, session, thisUser) {
@@ -45,8 +46,32 @@ const handler: NextApiHandler = nextApiEndpoint(
             return res200(res, {data: thisNote});
         }
     },
-    async function deleteFunction(req, res, session) {
+    async function deleteFunction(req, res, session, thisUser) {
+        if (!req.body.id) return res400(res);
 
+        const thisNoteWithContact = await PrmNoteModel.aggregate([
+            {
+                $match: {
+                    _id: mongoose.Types.ObjectId(req.body.id),
+                }
+            },
+            {
+                $lookup: {
+                    from: "prm_contacts",
+                    foreignField: "_id",
+                    localField: "prmContactId",
+                    as: "contactsArr",
+                },
+            },
+        ]);
+
+        if (!(thisNoteWithContact && thisNoteWithContact.length && thisNoteWithContact[0].contactsArr.length)) return res500(res, new Error("Invalid note ID"));
+
+        if (thisNoteWithContact[0].contactsArr[0].prmUserId.toString() !== thisUser._id.toString()) return res403(res);
+
+        await PrmNoteModel.deleteOne({_id: req.body.id});
+
+        return res200(res, {});
     },
 );
 

@@ -70,8 +70,12 @@ const handler: NextApiHandler = nextApiEndpoint(
             return res200(res, {data: thisContact});
         }
     },
-    async function deleteFunction(req, res, session) {
-
+    async function deleteFunction(req, res, session, thisUser) {
+        if (!req.body.id) return res400(res);
+        const thisContact = await PrmContactModel.findOne({_id: req.body.id});
+        if (thisContact.prmUserId.toString() !== thisUser._id.toString()) return res403(res);
+        await PrmContactModel.deleteOne({_id: req.body.id});
+        return res200(res, {});
     }
 );
 
